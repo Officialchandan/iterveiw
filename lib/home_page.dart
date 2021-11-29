@@ -1,6 +1,10 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:interview/login_page/login_page.dart';
 import 'package:interview/login_page/model/user_model.dart';
+import 'package:interview/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'login_page/model/api.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,81 +14,68 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Data> mydatalist = [];
-  Map<String, dynamic> mydata = {};
+  final DioClient _client = DioClient();
   @override
   void initState() {
-    getData();
-
-    print("_________^^^^^^$mydatalist");
+    print("_________^^^^^^$_client");
     super.initState();
-  }
-
-  getData() async {
-    String url = "https://myjson.dit.upm.es/api/bins/gbt5";
-
-    try {
-      Dio dio = Dio();
-      Response response = await dio.get(url);
-
-      Data ur1 = Data(
-          emailId: response.data['email'],
-          name: response.data['name'],
-          profilePic: response.data['profilePic']);
-
-      if (response.statusCode == 200) {
-        // ValueNotifier(mydata).value = mydata;
-        print(ur1.emailId);
-        mydatalist.add(ur1);
-      }
-    } on DioError catch (e) {
-      print(e);
-    }
-    return mydata;
   }
 
   @override
   Widget build(BuildContext context) {
+    var heightApp = MediaQuery.of(context).size.height;
+    var widthApp = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      body: Container(
-        height: 500,
-        width: 350,
-        color: Colors.red,
-        child: ListView.builder(
-          itemCount: mydatalist.length,
-          itemBuilder: (context, index) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                MaterialButton(
-                  onPressed: () async {
-                    await getData();
-                    setState(() {});
-                  },
-                  color: Colors.red,
-                  child: const Text("click"),
-                ),
-                CircleAvatar(
-                  backgroundImage: NetworkImage(mydatalist[index].profilePic!),
-                  maxRadius: 150.0,
-                  minRadius: 120,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: Center(
+        child: FutureBuilder<User?>(
+          future: _client.getUser(id: '1'),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              User? userInfo = snapshot.data;
+              if (userInfo != null) {
+                Data userData = userInfo.data;
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text("User Email Id -"),
-                    Text(mydatalist[index].emailId!)
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(userData.avatar),
+                      maxRadius: 80,
+                      minRadius: 60,
+                    ),
+                    SizedBox(height: heightApp * 0.01),
+                    Text(
+                      '${userInfo.data.firstName} ${userInfo.data.lastName}',
+                      style: const TextStyle(fontSize: 18.0),
+                    ),
+                    Text(
+                      userData.email,
+                      style: const TextStyle(fontSize: 18.0),
+                    ),
+                    SizedBox(height: heightApp * 0.03),
+                    MaterialButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0)),
+                      color: Colors.amber,
+                      onPressed: () async {
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        prefs.remove('email');
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return const MyApp();
+                        }));
+                      },
+                      child: Text(
+                        "logout".toLowerCase(),
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    )
                   ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const Text("User Name -"),
-                    Text(mydatalist[index].name!)
-                  ],
-                ),
-              ],
-            );
+                );
+              }
+            }
+            return const CircularProgressIndicator();
           },
         ),
       ),

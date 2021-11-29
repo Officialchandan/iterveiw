@@ -16,7 +16,7 @@ void main() async {
       fallbackLocale: Locale('en', 'US'),
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: email == null ? const HomePage() : const HomePage())));
+          home: email == null ? const MyApp() : const HomePage())));
 }
 
 class MyApp extends StatefulWidget {
@@ -44,6 +44,10 @@ class _MyAppState extends State<MyApp> {
           } else {
             // Loading is done, return the app:
             return MaterialApp(
+              routes: {
+                '/login': (context) => const MyApp(),
+                '/homepage': (context) => const HomePage(),
+              },
               theme: ThemeData(),
               debugShowCheckedModeBanner: false,
               localizationsDelegates: context.localizationDelegates,
