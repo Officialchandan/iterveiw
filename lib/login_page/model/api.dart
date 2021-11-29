@@ -1,24 +1,29 @@
-import 'package:dio/dio.dart';
 import 'package:interview/login_page/model/user_model.dart';
 
-class Apiclass {
-  static Future<Map<String, dynamic>> getUser() async {
-    String url = "https://myjson.dit.upm.es/api/bins/gbt5";
+import 'package:dio/dio.dart';
 
-    Dio _dio = Dio();
+class DioClient {
+  final Dio _dio = Dio();
+
+  final _baseUrl = 'https://reqres.in/api';
+
+  Future<User?> getUser({required String id}) async {
+    User? user;
     try {
-      Future<Response> response = (await _dio.get(url)) as Future<Response>;
-
-      if (response == 200) {
-        User userResponse = User.fromJson(response.toString());
-        Map<String, dynamic> userList =
-            userResponse.data as Map<String, dynamic>;
-        return userList;
+      Response userData = await _dio.get(_baseUrl + '/users/$id');
+      print('User Info: ${userData.data}');
+      user = User.fromJson(userData.data);
+    } on DioError catch (e) {
+      if (e.response != null) {
+        print('Dio error!');
+        print('STATUS: ${e.response?.statusCode}');
+        print('DATA: ${e.response?.data}');
+        print('HEADERS: ${e.response?.headers}');
       } else {
-        return {};
+        print('Error sending request!');
+        print(e.message);
       }
-    } catch (e) {
-      return {};
     }
+    return user;
   }
 }

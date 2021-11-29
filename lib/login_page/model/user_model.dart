@@ -1,49 +1,47 @@
-import 'dart:convert';
-
 class User {
   User({
-    this.data,
+    required this.data,
   });
 
-  Data? data;
+  Data data;
 
-  factory User.fromJson(String str) => User.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory User.fromMap(Map<String, dynamic> json) => User(
-        data: json["data"] == null ? null : Data.fromMap(json["data"]),
+  factory User.fromJson(Map<String, dynamic> json) => User(
+        data: Data.fromJson(json["data"]),
       );
 
-  Map<String, dynamic> toMap() => {
-        "data": data == null ? null : data!.toMap(),
+  Map<String, dynamic> toJson() => {
+        "data": data.toJson(),
       };
 }
 
 class Data {
   Data({
-    this.profilePic,
-    this.name,
-    this.emailId,
+    required this.id,
+    required this.email,
+    required this.firstName,
+    required this.lastName,
+    required this.avatar,
   });
 
-  String? profilePic;
-  String? name;
-  String? emailId;
+  int id;
+  String email;
+  String firstName;
+  String lastName;
+  String avatar;
 
-  factory Data.fromJson(String str) => Data.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory Data.fromMap(Map<String, dynamic> json) => Data(
-        profilePic: json["profile_pic"] == null ? null : json["profile_pic"],
-        name: json["name"] == null ? null : json["name"],
-        emailId: json["email_id"] == null ? null : json["email_id"],
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+        id: json["id"],
+        email: json["email"],
+        firstName: json["first_name"],
+        lastName: json["last_name"],
+        avatar: json["avatar"],
       );
 
-  Map<String, dynamic> toMap() => {
-        "profile_pic": profilePic == null ? null : profilePic,
-        "name": name == null ? null : name,
-        "email_id": emailId == null ? null : emailId,
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "email": email,
+        "first_name": firstName,
+        "last_name": lastName,
+        "avatar": avatar,
       };
 }
