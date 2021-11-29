@@ -1,0 +1,15 @@
+{
+    "login_title" : "Login",
+    "your_name" : "Your Email",
+    "your_password" : "Password",
+    "don't_have_an_account":"Don't have an Account ?",
+    "sign_up": "Sign Up",
+    "input_text_fild_e1":"Please enter email",
+    "input_text_fild_e2":"please enter a valid email",
+    "pass_text_fild_e1":"Please enter password",
+    "pass_text_fild_e2":"Please enter 6 digit password",
+    "pass_text_fild_e3":"Please enter 8 digit password"
+
+
+
+    }
