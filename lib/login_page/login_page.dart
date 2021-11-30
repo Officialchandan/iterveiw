@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:ui';
 
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
@@ -22,91 +23,106 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
+  final bool isObscure = true;
+
   final _formKey = GlobalKey<FormState>();
+  @override
+  void dispose() {
+    _email.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: Background(
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  TextButton(
-                      onPressed: () {
-                        context.setLocale(const Locale('hi'));
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MyApp()));
-                      },
-                      child: const Text("Hindi")),
-                  TextButton(
-                      onPressed: () {
-                        context.setLocale(const Locale('en', 'US'));
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MyApp()));
-                      },
-                      child: const Text("English")),
-                ]),
-                Text(
-                  "login_title".tr(),
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: size.height * 0.03),
-                SvgPicture.asset(
-                  "assets/login.svg",
-                  height: size.height * 0.35,
-                ),
-                SizedBox(height: size.height * 0.03),
-                RoundedInputField(
-                  email: _email,
-                  hintText: "your_name".tr(),
-                  onChanged: (value) {},
-                ),
-                RoundedPasswordField(
-                  password: _password,
-                  onChanged: (value) {},
-                ),
-                RoundedButton(
-                  text: "login_title".tr(),
-                  press: () async {
-                    await save();
-                    setState(() {});
-                    print("email${_email.text.toString()}");
-                    print("password${_password.text.toString()}");
-
-                    if (_formKey.currentState!.validate()) {
-                      await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext ctx) => const HomePage()));
-                      return null;
-                    } else {
-                      print("Not Login");
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: size.height * 0.03),
-                AlreadyHaveAnAccountCheck(
-                  press: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const Singup();
+      child: Scaffold(
+        body: Background(
+          child: SingleChildScrollView(
+            child: Form(
+              autovalidate: true,
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    TextButton(
+                        onPressed: () {
+                          context.setLocale(const Locale('hi'));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MyApp()));
                         },
-                      ),
-                    );
-                  },
-                ),
-              ],
+                        child: Text("Hindi".tr())),
+                    TextButton(
+                        onPressed: () {
+                          context.setLocale(const Locale('en', 'US'));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MyApp()));
+                        },
+                        child: Text("English".tr())),
+                  ]),
+                  Text(
+                    "login_title".tr(),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: size.height * 0.03),
+                  SvgPicture.asset(
+                    "assets/login.svg",
+                    height: size.height * 0.35,
+                  ),
+                  SizedBox(height: size.height * 0.03),
+                  RoundedInputField(
+                    onchg: false,
+                    email: _email,
+                    hintText: "your_name".tr(),
+                    onChanged: (value) {},
+                  ),
+                  RoundedPasswordField(
+                    isObscure: isObscure,
+                    password: _password,
+                    onChanged: (value) {},
+                  ),
+                  RoundedButton(
+                    text: "login_title".tr(),
+                    press: () async {
+                      await save();
+                      setState(() {});
+                      print("email${_email.text.toString()}");
+                      print("password${_password.text.toString()}");
+
+                      if (_formKey.currentState!.validate()) {
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext ctx) =>
+                                    const HomePage()));
+                        return null;
+                      } else {
+                        print("Not Login");
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: size.height * 0.03),
+                  AlreadyHaveAnAccountCheck(
+                    press: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return const Singup();
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -198,7 +214,7 @@ class AlreadyHaveAnAccountCheck extends StatelessWidget {
 
 class RoundedInputField extends StatelessWidget {
   final String hintText;
-
+  final bool onchg;
   final IconData icon;
   TextEditingController email;
   final ValueChanged<String> onChanged;
@@ -208,6 +224,7 @@ class RoundedInputField extends StatelessWidget {
     required this.email,
     this.icon = Icons.person,
     required this.onChanged,
+    required this.onchg,
   }) : super(key: key);
 
   @override
@@ -218,18 +235,17 @@ class RoundedInputField extends StatelessWidget {
         child: TextFormField(
           controller: email,
           autofillHints: const [AutofillHints.email],
-          autovalidate: true,
           validator: (value) {
             Pattern pattern =
                 r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
             RegExp regex = RegExp(pattern.toString());
             if (value == null || value.isEmpty) {
-              return 'Please enter email..';
+              return 'please_enter_email'.tr();
             } else if (!(regex.hasMatch(value))) {
-              return "please enter a valid email";
+              return "please_enter_a_valid_email".tr();
             }
           },
-          onChanged: onChanged,
+          onChanged: (val) {},
           cursorColor: kPrimaryColor,
           decoration: InputDecoration(
             icon: Icon(
@@ -248,11 +264,13 @@ class RoundedInputField extends StatelessWidget {
 class RoundedPasswordField extends StatefulWidget {
   final ValueChanged<String> onChanged;
   final TextEditingController password;
+  final bool isObscure;
 
-  RoundedPasswordField({
+  const RoundedPasswordField({
     Key? key,
     required this.onChanged,
     required this.password,
+    required this.isObscure,
   }) : super(key: key);
 
   @override
@@ -262,23 +280,20 @@ class RoundedPasswordField extends StatefulWidget {
 class _RoundedPasswordFieldState extends State<RoundedPasswordField> {
   @override
   Widget build(BuildContext context) {
-    bool _isObscure = true;
-
     return TextFieldContainer(
       child: Material(
         color: kPrimaryLightColor,
         child: TextFormField(
           controller: widget.password,
           autofillHints: const [AutofillHints.password],
-          autovalidate: true,
           maxLength: 10,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter password';
+              return 'Please_enter_password'.tr();
             } else if (value.length < 6) {
-              return "Please enter 6 digit password";
+              return "Please_enter_6_digit_password".tr();
             } else if (value.length > 8) {
-              return "Please enter 8 digit password";
+              return "Please not enter 8 digit password".tr();
             }
           },
           obscureText: true,
@@ -292,22 +307,22 @@ class _RoundedPasswordFieldState extends State<RoundedPasswordField> {
               color: kPrimaryColor,
             ),
             border: InputBorder.none,
-            suffixIcon: textChange(_isObscure),
+            suffixIcon: textChange(),
           ),
         ),
       ),
     );
   }
 
-  IconButton textChange(bool _isObscure) {
+  IconButton textChange() {
     return IconButton(
       icon: Icon(
-        _isObscure ? Icons.visibility : Icons.visibility_off,
+        widget.isObscure ? Icons.visibility : Icons.visibility_off,
         color: kPrimaryColor,
       ),
       onPressed: () {
         setState(() {
-          _isObscure = !_isObscure;
+          widget.isObscure == false;
         });
       },
     );

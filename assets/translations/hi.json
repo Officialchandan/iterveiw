@@ -4,9 +4,12 @@
     "your_password" : "आपका पासवर्ड",
     "don't_have_an_account":"खाता नहीं है ?",
     "sign_up": "साइन अप करें",
-    "input_text_fild_e1":"कृपया ईमेल दर्ज करें",
-    "input_text_fild_e2":"कृपया एक मान्य ईमेल पता प्रवेश करें",
-    "pass_text_fild_e1":"कृप्या पास्वर्ड भरो",
-    "pass_text_fild_e2":"कृपया 6 अंकों का पासवर्ड दर्ज करें",
-    "pass_text_fild_e3":"कृपया 8 अंकों का पासवर्ड दर्ज करें"
+    "please_enter_email": "कृपया ईमेल दर्ज करें।",
+    "please_enter_a_valid_email":"कृपया एक मान्य ईमेल पता प्रवेश करें", 
+    "Please_enter_password":"कृप्या पास्वर्ड भरो",
+    "Please_enter_6_digit_password":"कृपया 6 अंकों का पासवर्ड दर्ज करें",
+    "Please_enter_8_digit_password": "कृपया 8 अंकों का पासवर्ड न डालें",
+    "Hindi":"हिंदी",
+    "English":"अंग्रेज़ी"
+   
     }

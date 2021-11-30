@@ -3,8 +3,15 @@
     "your_name" : "Your Email",
     "your_password" : "Your Password",
     "don't_have_an_account":"Don't have an Account ?",
-    "sign_up": "Sign Up"
-   
+    "sign_up": "Sign Up",
+    "please_enter_email": "Please enter email.",
+    "please_enter_a_valid_email":"please enter a valid email", 
+    "Please_enter_password":"Please enter password",
+    "Please_enter_6_digit_password":"Please enter 6 digit password",
+    "Please_enter_8_digit_password": "Please not enter 8 digit password",
+    "Hindi":"Hindi",
+    "English":"English"
+
 
 
 

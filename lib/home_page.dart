@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:interview/login_page/login_page.dart';
+import 'package:interview/login_page/model/model.dart';
 import 'package:interview/login_page/model/user_model.dart';
 import 'package:interview/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,33 +25,35 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     var heightApp = MediaQuery.of(context).size.height;
     var widthApp = MediaQuery.of(context).size.width;
 
     return Scaffold(
       body: Center(
-        child: FutureBuilder<User?>(
-          future: _client.getUser(id: '1'),
+        child: FutureBuilder<DataFormUser?>(
+          future: _client.dataUser('data'),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              User? userInfo = snapshot.data;
+              DataFormUser? userInfo = snapshot.data;
               if (userInfo != null) {
-                Data userData = userInfo.data;
+                var userData = userInfo.data;
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     CircleAvatar(
-                      backgroundImage: NetworkImage(userData.avatar),
+                      backgroundImage: NetworkImage(userData!.profilePic!),
                       maxRadius: 80,
                       minRadius: 60,
                     ),
                     SizedBox(height: heightApp * 0.01),
                     Text(
-                      '${userInfo.data.firstName} ${userInfo.data.lastName}',
+                      userInfo.data!.emailId!,
                       style: const TextStyle(fontSize: 18.0),
                     ),
                     Text(
-                      userData.email,
+                      userData.name!,
                       style: const TextStyle(fontSize: 18.0),
                     ),
                     SizedBox(height: heightApp * 0.03),
