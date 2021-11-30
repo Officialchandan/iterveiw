@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:flutter/services.dart';
 import 'package:interview/login_page/login_page.dart';
 import 'package:interview/login_page/model/model.dart';
+=======
+import 'package:interview/login_page/login_page.dart';
+>>>>>>> 3327377b62fe6bfa1aeaf3a919d2f96053132c24
 import 'package:interview/login_page/model/user_model.dart';
 import 'package:interview/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,13 +29,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+=======
+>>>>>>> 3327377b62fe6bfa1aeaf3a919d2f96053132c24
     var heightApp = MediaQuery.of(context).size.height;
     var widthApp = MediaQuery.of(context).size.width;
 
     return Scaffold(
       body: Center(
+<<<<<<< HEAD
         child: FutureBuilder<DataFormUser?>(
           future: _client.dataUser('data'),
           builder: (context, snapshot) {
@@ -39,21 +47,42 @@ class _HomePageState extends State<HomePage> {
               DataFormUser? userInfo = snapshot.data;
               if (userInfo != null) {
                 var userData = userInfo.data;
+=======
+        child: FutureBuilder<User?>(
+          future: _client.getUser(id: '1'),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              User? userInfo = snapshot.data;
+              if (userInfo != null) {
+                Data userData = userInfo.data;
+>>>>>>> 3327377b62fe6bfa1aeaf3a919d2f96053132c24
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     CircleAvatar(
+<<<<<<< HEAD
                       backgroundImage: NetworkImage(userData!.profilePic!),
+=======
+                      backgroundImage: NetworkImage(userData.avatar),
+>>>>>>> 3327377b62fe6bfa1aeaf3a919d2f96053132c24
                       maxRadius: 80,
                       minRadius: 60,
                     ),
                     SizedBox(height: heightApp * 0.01),
                     Text(
+<<<<<<< HEAD
                       userInfo.data!.emailId!,
                       style: const TextStyle(fontSize: 18.0),
                     ),
                     Text(
                       userData.name!,
+=======
+                      '${userInfo.data.firstName} ${userInfo.data.lastName}',
+                      style: const TextStyle(fontSize: 18.0),
+                    ),
+                    Text(
+                      userData.email,
+>>>>>>> 3327377b62fe6bfa1aeaf3a919d2f96053132c24
                       style: const TextStyle(fontSize: 18.0),
                     ),
                     SizedBox(height: heightApp * 0.03),
