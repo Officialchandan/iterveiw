@@ -1,6 +1,3 @@
-import 'dart:ffi';
-import 'dart:ui';
-
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,8 +20,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
-<<<<<<< HEAD
-  final bool isObscure = true;
+  final bool _autoValidate = true;
+  final bool _isValid = false;
 
   final _formKey = GlobalKey<FormState>();
   @override
@@ -34,14 +31,10 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-=======
-  final _formKey = GlobalKey<FormState>();
->>>>>>> 3327377b62fe6bfa1aeaf3a919d2f96053132c24
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-<<<<<<< HEAD
       child: Scaffold(
         body: Background(
           child: SingleChildScrollView(
@@ -88,7 +81,6 @@ class _LoginPageState extends State<LoginPage> {
                     onChanged: (value) {},
                   ),
                   RoundedPasswordField(
-                    isObscure: isObscure,
                     password: _password,
                     onChanged: (value) {},
                   ),
@@ -128,88 +120,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
-=======
-      child: Background(
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  TextButton(
-                      onPressed: () {
-                        context.setLocale(const Locale('hi'));
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MyApp()));
-                      },
-                      child: const Text("Hindi")),
-                  TextButton(
-                      onPressed: () {
-                        context.setLocale(const Locale('en', 'US'));
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MyApp()));
-                      },
-                      child: const Text("English")),
-                ]),
-                Text(
-                  "login_title".tr(),
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: size.height * 0.03),
-                SvgPicture.asset(
-                  "assets/login.svg",
-                  height: size.height * 0.35,
-                ),
-                SizedBox(height: size.height * 0.03),
-                RoundedInputField(
-                  email: _email,
-                  hintText: "your_name".tr(),
-                  onChanged: (value) {},
-                ),
-                RoundedPasswordField(
-                  password: _password,
-                  onChanged: (value) {},
-                ),
-                RoundedButton(
-                  text: "login_title".tr(),
-                  press: () async {
-                    await save();
-                    setState(() {});
-                    print("email${_email.text.toString()}");
-                    print("password${_password.text.toString()}");
-
-                    if (_formKey.currentState!.validate()) {
-                      await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext ctx) => const HomePage()));
-                      return null;
-                    } else {
-                      print("Not Login");
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: size.height * 0.03),
-                AlreadyHaveAnAccountCheck(
-                  press: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const Singup();
-                        },
-                      ),
-                    );
-                  },
-                ),
-              ],
->>>>>>> 3327377b62fe6bfa1aeaf3a919d2f96053132c24
             ),
           ),
         ),
@@ -301,11 +211,7 @@ class AlreadyHaveAnAccountCheck extends StatelessWidget {
 
 class RoundedInputField extends StatelessWidget {
   final String hintText;
-<<<<<<< HEAD
   final bool onchg;
-=======
-
->>>>>>> 3327377b62fe6bfa1aeaf3a919d2f96053132c24
   final IconData icon;
   TextEditingController email;
   final ValueChanged<String> onChanged;
@@ -355,18 +261,12 @@ class RoundedInputField extends StatelessWidget {
 class RoundedPasswordField extends StatefulWidget {
   final ValueChanged<String> onChanged;
   final TextEditingController password;
-<<<<<<< HEAD
-  final bool isObscure;
+  final bool isObscure = true;
 
   const RoundedPasswordField({
-=======
-
-  RoundedPasswordField({
->>>>>>> 3327377b62fe6bfa1aeaf3a919d2f96053132c24
     Key? key,
     required this.onChanged,
     required this.password,
-    required this.isObscure,
   }) : super(key: key);
 
   @override
@@ -376,11 +276,6 @@ class RoundedPasswordField extends StatefulWidget {
 class _RoundedPasswordFieldState extends State<RoundedPasswordField> {
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-=======
-    bool _isObscure = true;
-
->>>>>>> 3327377b62fe6bfa1aeaf3a919d2f96053132c24
     return TextFieldContainer(
       child: Material(
         color: kPrimaryLightColor,
@@ -408,22 +303,22 @@ class _RoundedPasswordFieldState extends State<RoundedPasswordField> {
               color: kPrimaryColor,
             ),
             border: InputBorder.none,
-            suffixIcon: textChange(),
+            suffixIcon: textChange(isObscure: widget.isObscure),
           ),
         ),
       ),
     );
   }
 
-  IconButton textChange() {
+  IconButton textChange({bool isObscure = false}) {
     return IconButton(
       icon: Icon(
-        widget.isObscure ? Icons.visibility : Icons.visibility_off,
+        isObscure ? Icons.visibility : Icons.visibility_off,
         color: kPrimaryColor,
       ),
       onPressed: () {
         setState(() {
-          widget.isObscure == false;
+          isObscure = !isObscure;
         });
       },
     );
